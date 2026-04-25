@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codi | Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #000;
+      color: #f5f5f5;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    a, button {
+      cursor: none;
+    }
+
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+    }
+
+    .cursor-dot {
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    .cursor-ring {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: 50%;
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+    }
+
+    .cursor-ring.hover {
+      width: 48px;
+      height: 48px;
+      border-color: rgba(255, 255, 255, 0.95);
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: radial-gradient(#fff 1px, transparent 1px);
+      background-size: 18px 18px;
+      z-index: 0;
+    }
+
+    .glow {
+      position: fixed;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.10), rgba(130,130,130,0.04), transparent 70%);
+      top: -180px;
+      right: -160px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 38px 0 80px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 90px;
+    }
+
+    .logo {
+      font-size: 14px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #e8e8e8;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .hero {
+      min-height: 72vh;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      align-items: center;
+      gap: 70px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #b7b7b7;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 8px 12px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .tag span {
+      width: 7px;
+      height: 7px;
+      background: #fff;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: clamp(48px, 8vw, 94px);
+      line-height: 0.95;
+      letter-spacing: -0.065em;
+      max-width: 780px;
+      margin-bottom: 26px;
+    }
+
+    .muted {
+      color: #8f8f8f;
+    }
+
+    .hero p {
+      max-width: 590px;
+      color: #b8b8b8;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+      padding: 13px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.04);
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.28);
+    }
+
+    .pfp-wrap {
+      justify-self: end;
+      position: relative;
+    }
+
+    .pfp-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -18px;
+      border-radius: 38px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(120,120,120,0.04), transparent);
+      filter: blur(4px);
+      z-index: -1;
+    }
+
+    .pfp {
+      width: 320px;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 34px;
+      border: 1px solid rgba(255,255,255,0.13);
+      background: #090909;
+      display: block;
+    }
+
+    section {
+      padding: 90px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .section-title {
+      font-size: 13px;
+      color: #777;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .about-text {
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.16;
+      letter-spacing: -0.045em;
+      max-width: 900px;
+      color: #f0f0f0;
+    }
+
+    .about-small {
+      margin-top: 26px;
+      max-width: 680px;
+      color: #aaa;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .card {
+      min-height: 160px;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+    }
+
+    .card h3 {
+      font-size: 17px;
+      margin-bottom: 12px;
+      color: #f2f2f2;
+    }
+
+    .card p {
+      color: #9d9d9d;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .socials {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .social {
+      width: 54px;
+      height: 54px;
+      border-radius: 17px;
+      border: 1px solid rgba(255,255,255,0.11);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: rgba(255,255,255,0.035);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .social:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .social svg {
+      width: 23px;
+      height: 23px;
+      fill: url(#iconGradient);
+    }
+
+    footer {
+      padding-top: 55px;
+      color: #777;
+      font-size: 14px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    @media (max-width: 850px) {
+      body {
+        cursor: auto;
+      }
+
+      a, button {
+        cursor: pointer;
+      }
+
+      .cursor-dot,
+      .cursor-ring {
+        display: none;
+      }
+
+      nav {
+        margin-bottom: 55px;
+      }
+
+      .nav-links {
+        gap: 16px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 45px;
+      }
+
+      .pfp-wrap {
+        justify-self: start;
+      }
+
+      .pfp {
+        width: min(320px, 100%);
+        height: auto;
+        aspect-ratio: 1 / 1;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" aria-hidden="true">
+    <defs>
+      <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffffff" />
+        <stop offset="55%" stop-color="#b8b8b8" />
+        <stop offset="100%" stop-color="#5f5f5f" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+  <div class="noise"></div>
+  <div class="glow"></div>
+
+  <main class="page">
+    <nav>
+      <div class="logo">Codi</div>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <section class="hero" id="top">
+      <div>
+        <div class="tag"><span></span> Security-focused developer</div>
+        <h1>I build tools and break things down.</h1>
+        <p>
+          I’m into reverse engineering, web security, automation, and figuring out how systems actually work.
+        </p>
+
+        <div class="buttons">
+          <a class="btn" href="https://github.com/reallcodi" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/cody-w-a5a269242/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+
+      <div class="pfp-wrap">
+        <img class="pfp" src="https://media.discordapp.net/attachments/1491963943852314756/1497426591767068762/2910c3a1-29f0-4570-b9fd-7993ca89ebdc.png?ex=69ed7ab0&is=69ec2930&hm=d9797f125ec5fb12e7f52a3f5627a19d08e0a4c8c94f08a86c9465a030128bda&=&format=webp&quality=lossless&width=1024&height=1024" alt="Codi profile picture" />
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="section-title">About</div>
+      <p class="about-text">
+        I like taking things apart, understanding the logic, and building small projects from what I learn.
+      </p>
+      <p class="about-small">
+        Most of my work is around reverse engineering, Python tools, web testing, APIs, and automation. I keep things simple and practical.
+      </p>
+    </section>
+
+    <section id="work">
+      <div class="section-title">Work</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Reverse Engineering</h3>
+          <p>Looking through apps, logic flows, protections, and how things behave under the hood.</p>
+        </div>
+        <div class="card">
+          <h3>Security Testing</h3>
+          <p>Testing web apps, APIs, requests, and weird edge cases in controlled environments.</p>
+        </div>
+        <div class="card">
+          <h3>Tools</h3>
+          <p>Small scripts and utilities for automation, scraping, link analysis, and testing.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-title">Contact</div>
+      <p class="about-text">Find me here.</p>
+
+      <div class="socials">
+        <a class="social" href="https://github.com/reallcodi" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" role="img">
+            <path d="M12 0C5.37 0 0 5.5 0 12.28c0 5.42 3.44 10.02 8.2 11.64.6.11.82-.27.82-.59 0-.29-.01-1.06-.02-2.08-3.34.74-4.04-1.65-4.04-1.65-.55-1.42-1.34-1.8-1.34-1.8-1.09-.76.08-.74.08-.74 1.2.09 1.84 1.27 1.84 1.27 1.07 1.88 2.81 1.34 3.5 1.02.11-.79.42-1.34.76-1.64-2.66-.31-5.46-1.36-5.46-6.06 0-1.34.47-2.43 1.24-3.29-.12-.31-.54-1.56.12-3.25 0 0 1.01-.33 3.3 1.26A11.2 11.2 0 0 1 12 5.96c1.02.01 2.05.14 3.01.41 2.29-1.59 3.3-1.26 3.3-1.26.66 1.69.24 2.94.12 3.25.77.86 1.24 1.95 1.24 3.29 0 4.71-2.8 5.74-5.48 6.05.43.38.81 1.12.81 2.26 0 1.63-.02 2.94-.02 3.34 0 .33.22.71.83.59A12.27 12.27 0 0 0 24 12.28C24 5.5 18.63 0 12 0Z" />
+          </svg>
+        </a>
+
+        <a class="social" href="https://www.linkedin.com/in/cody-w-a5a269242/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" role="img">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.26 2.37 4.26 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z" />
+          </svg>
+        </a>
+
+        <a class="social" href="mailto:codi@astermail.org" aria-label="Email">
+          <svg viewBox="0 0 24 24" role="img">
+            <path d="M2.4 4h19.2C22.93 4 24 5.07 24 6.4v11.2c0 1.33-1.07 2.4-2.4 2.4H2.4A2.4 2.4 0 0 1 0 17.6V6.4C0 5.07 1.07 4 2.4 4Zm9.6 8.7L21.1 6H2.9l9.1 6.7Zm0 2.3L2.4 8v9.6h19.2V8L12 15Z" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      Built by Codi. Clean, simple, no extra noise.
+    </footer>
+  </main>
+
+  <script>
+    const dot = document.querySelector('.cursor-dot');
+    const ring = document.querySelector('.cursor-ring');
+    const hoverTargets = document.querySelectorAll('a, button, .card');
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let ringX = mouseX;
+    let ringY = mouseY;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      dot.style.opacity = '1';
+      ring.style.opacity = '1';
+      dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+    });
+
+    hoverTargets.forEach((target) => {
+      target.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      target.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+
+    function animateCursor() {
+      ringX += (mouseX - ringX) * 0.14;
+      ringY += (mouseY - ringY) * 0.14;
+      ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    let currentScroll = window.scrollY;
+    let targetScroll = window.scrollY;
+    let maxScroll = document.body.scrollHeight - window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      maxScroll = document.body.scrollHeight - window.innerHeight;
+    });
+
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      maxScroll = document.body.scrollHeight - window.innerHeight;
+      targetScroll += e.deltaY * 0.9;
+      targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+    }, { passive: false });
+
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        targetScroll = target.offsetTop - 20;
+      });
+    });
+
+    function smoothScroll() {
+      currentScroll += (targetScroll - currentScroll) * 0.085;
+      window.scrollTo(0, currentScroll);
+      requestAnimationFrame(smoothScroll);
+    }
+    smoothScroll();
+  </script>
+</body>
+</html>
