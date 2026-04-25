@@ -1,16 +1,24 @@
-## Hi there 👋
+## codi
 
-<!--
-**reallcodi/reallcodi** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+security-focused dev  
+reverse engineering, web testing, automation  
 
-Here are some ideas to get you started:
+---
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+i like breaking things down and seeing how they actually work.  
+mostly working with python, APIs, and small tools.
+
+---
+
+### stuff i do
+- reverse engineering (exe, .net, python)
+- web security testing
+- automation scripts
+- api analysis
+
+---
+
+### contact
+github: https://github.com/reallcodi  
+linkedin: https://www.linkedin.com/in/cody-w-a5a269242/  
+email: codi@astermail.org
